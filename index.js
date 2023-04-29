@@ -42,6 +42,26 @@ app.post("/signup", (req, res) => {
   );
 });
 
+app.post("/signin", (req, res) => {
+  const name = req.body.name;
+  const password = req.body.password;
+  connection.query(
+    "SELECT * FROM user WHERE name = ? AND password ?",
+    [name, password],
+    (err, result) => {
+      if (err) {
+        req.setEncoding({ err: err });
+      } else {
+        if (result.length > 0) {
+          req.send(result);
+        } else {
+          res.send({ message: "Wrong Username or Password" });
+        }
+      }
+    }
+  );
+});
+
 var server = app.listen(port, hostname, () => {
   console.log(`Server Started on : http://${hostname}:${port}/`);
 });
