@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 
 const hostname = "localhost";
-const port = 3001;
+const port = 3002;
 
 app.use(express.json());
 app.use(cors());
@@ -43,17 +43,20 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  const name = req.body.name;
-  const password = req.body.password;
+  console.log(req.body);
+  const name = req.body.SignInName;
+  const password = req.body.SignInPassword;
+
   connection.query(
-    "SELECT * FROM user WHERE name = ? AND password ?",
+    "SELECT * FROM `user` WHERE `name` = ? AND `password`= ?",
     [name, password],
     (err, result) => {
+      console.log(err);
       if (err) {
         req.setEncoding({ err: err });
       } else {
         if (result.length > 0) {
-          req.send(result);
+          res.send(200);
         } else {
           res.send({ message: "Wrong Username or Password" });
         }
